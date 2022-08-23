@@ -1,0 +1,24 @@
+name: Generate Artifact
+on:
+  workflow_dispatch:
+  release:
+    types: [ published ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set go version
+        uses: actions/setup-go@v2
+        with:
+          go-version: '1.16'
+      - name: Go test
+        run: make test
+      - name: Generate artifact
+        run: make build
+      - name: Upload artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: SUB_NOTIFIER
+          path: bin
